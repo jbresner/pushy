@@ -1,5 +1,5 @@
 let circles = [];
-let numCircles = 300;
+let numCircles = 5000;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
