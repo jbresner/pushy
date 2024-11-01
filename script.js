@@ -1,7 +1,6 @@
 let circles = [];
-let numCircles = 100;
-let circleRadius = 2;  // Made the circles much smaller
-let gridSpacing = circleRadius * 2;
+let circleRadius = 5;  // Increased the circle size to make them more visible
+let gridSpacing = circleRadius * 2.5;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -34,7 +33,7 @@ class Circle {
   update() {
     let mouse = createVector(mouseX, mouseY);
     let d = dist(mouse.x, mouse.y, this.position.x, this.position.y);
-    if (d < 100 && !this.moving) {  // Increased interaction distance
+    if (d < 100) {
       let force = p5.Vector.sub(this.position, mouse);
       force.setMag(5 / d);
       this.position.add(force);
@@ -65,3 +64,4 @@ class Circle {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
