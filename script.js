@@ -1,6 +1,6 @@
 let circles = [];
-let numCircles = 5000;
-let circleRadius = 5;
+let numCircles = 1000;
+let circleRadius = 2;  // Made the circles much smaller
 let gridSpacing = circleRadius * 2;
 
 function setup() {
