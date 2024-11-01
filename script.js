@@ -30,9 +30,9 @@ class Circle {
   update() {
     let mouse = createVector(mouseX, mouseY);
     let d = dist(mouse.x, mouse.y, this.position.x, this.position.y);
-    if (d < 100) {
+    if (d < 150) {  // Increased the interaction distance
       let force = p5.Vector.sub(this.position, mouse);
-      force.setMag(5 / d);
+      force.setMag(10 / d);  // Increased the magnitude of the force
       this.position.add(force);
     } else {
       // Return to original position if not affected by mouse
@@ -50,3 +50,4 @@ class Circle {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
+
