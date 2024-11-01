@@ -1,14 +1,18 @@
 let circles = [];
 let numCircles = 5000;
+let circleRadius = 5;
+let gridSpacing = circleRadius * 2;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  for (let i = 0; i < numCircles; i++) {
-    let angle = random(TWO_PI);
-    let radius = random(100, min(width, height) / 2);
-    let x = width / 2 + radius * cos(angle);
-    let y = height / 2 + radius * sin(angle);
-    circles.push(new Circle(x, y));
+  let cols = floor(width / gridSpacing);
+  let rows = floor(height / gridSpacing);
+  for (let x = 0; x < cols; x++) {
+    for (let y = 0; y < rows; y++) {
+      let posX = x * gridSpacing + gridSpacing / 2;
+      let posY = y * gridSpacing + gridSpacing / 2;
+      circles.push(new Circle(posX, posY));
+    }
   }
 }
 
@@ -23,21 +27,32 @@ function draw() {
 class Circle {
   constructor(x, y) {
     this.position = createVector(x, y);
-    this.originalPosition = this.position.copy();
-    this.radius = 5;
+    this.radius = circleRadius;
+    this.moving = false;
   }
 
   update() {
     let mouse = createVector(mouseX, mouseY);
     let d = dist(mouse.x, mouse.y, this.position.x, this.position.y);
-    if (d < 150) {  // Increased the interaction distance
+    if (d < 100 && !this.moving) {  // Increased interaction distance
       let force = p5.Vector.sub(this.position, mouse);
-      force.setMag(10 / d);  // Increased the magnitude of the force
+      force.setMag(5 / d);
       this.position.add(force);
-    } else {
-      // Return to original position if not affected by mouse
-      this.position.lerp(this.originalPosition, 0.05);
+      this.moving = true;
     }
+
+    for (let other of circles) {
+      if (other !== this && this.isOverlapping(other)) {
+        let overlap = p5.Vector.sub(this.position, other.position).setMag(this.radius);
+        other.position.add(overlap);
+        other.moving = true;
+      }
+    }
+  }
+
+  isOverlapping(other) {
+    let d = dist(this.position.x, this.position.y, other.position.x, other.position.y);
+    return d < this.radius * 2;
   }
 
   display() {
@@ -50,4 +65,3 @@ class Circle {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-
